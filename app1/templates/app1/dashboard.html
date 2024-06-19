@@ -1,0 +1,135 @@
+{% extends "app1/main.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Student Management</title>
+    <link rel="stylesheet" href="{% static 'CSS/Style.css' %}">
+</head>
+<body>
+    {% block content %}
+    <style>
+        .card-header {
+            background-color: #343a40;
+            color: white;
+            text-align:center;
+            height:60px;
+            font-size:30px;
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            border-radius: 5px;
+        }
+        .btn-primary:hover, .btn-danger:hover {
+            opacity: 0.8;
+        }
+        .custom-edit-btn, .custom-delete-btn {
+            width: 80px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        
+        .custom-edit-btn {
+            background-color: #fff;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+        
+        .custom-delete-btn {
+            background-color: #fff;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        
+        .custom-edit-btn:hover {
+            background-color: blue;
+        }
+        
+        .custom-delete-btn:hover {
+            background-color: red;
+        }
+        label {
+        display: none;
+        }
+
+    </style>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        Insert Student Details
+                    </div>
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-success btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        Student Details
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                <tr>
+                                    <th scope="row">{{ student.id }}</th>
+                                    <td>{{ student.name }}</td>
+                                    <td>{{ student.email }}</td>
+                                    <td>{{ student.age }}</td>
+                                    <td>{{ student.gender }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_student' student.id %}" class="btn btn-primary btn-sm custom-edit-btn">Edit</a>
+                                    </td>
+                                    <td>
+                                        <form action="{% url 'delete_student' student.id %}" method="post" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm custom-delete-btn">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+</body>
+</html>
+
